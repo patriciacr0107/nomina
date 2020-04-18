@@ -6,7 +6,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Scanner;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -15,14 +14,15 @@ import co.com.udem.nomina.dto.EmpleadoDTO;
 public class LecturaArchivo {
 
 	private static final Logger logger = LogManager.getLogger(LecturaArchivo.class);
+	private String rutaArchivo = "c:\\nominaEmpleados.txt";
 	private Hashtable<String, EmpleadoDTO> listaEmpleados = new Hashtable<String, EmpleadoDTO>();
 	private int cantidadRegistros =0;
 	
 	public String leerArchivo() {
-		BasicConfigurator.configure();
-		File archivoNomina = new File("c:\\nominaEmpleados.txt");
+
+		File archivoNomina = new File(rutaArchivo);
 		Scanner scanner = null;
-		String mensaje = "";
+		String mensaje = "Procesado OK";
 		
 		try {
 			scanner = new Scanner(archivoNomina);
@@ -30,7 +30,9 @@ public class LecturaArchivo {
 				String registro = scanner.nextLine();
 				leerRegistro(registro);
 				cantidadRegistros++;
+				
 			}
+			imprimirEmpleadosArchivo(listaEmpleados);
 			
 		} catch (FileNotFoundException e) {
 			mensaje = "El archivo no existe";
@@ -49,7 +51,7 @@ public class LecturaArchivo {
 		Scanner scanner = new Scanner(registro);
 		scanner.useDelimiter(",");
 		
-		while (scanner.hasNext()) {
+		//while (scanner.hasNext()) {
 			EmpleadoDTO empleadoDTO = new EmpleadoDTO();
 			empleadoDTO.setNombres(scanner.next());
 			empleadoDTO.setApellidos(scanner.next());
@@ -57,8 +59,8 @@ public class LecturaArchivo {
 			empleadoDTO.setDepartamento(scanner.next());
 			empleadoDTO.setSalario(Double.parseDouble(scanner.next()));
 			listaEmpleados.put(empleadoDTO.getCedula(), empleadoDTO);
-		}
-		imprimirEmpleadosArchivo(listaEmpleados);
+		//}
+		
 		scanner.close();
 	}
 	
@@ -67,9 +69,7 @@ public class LecturaArchivo {
 	}
 	
 	public void imprimirEmpleadosArchivo(Hashtable<String, EmpleadoDTO> listaEmpleados) {
-		BasicConfigurator.configure();
-		//logger.info(listaEmpleados);
-		EmpleadoDTO empleadounico = new EmpleadoDTO();
+		EmpleadoDTO empleadounico;
 		Enumeration<EmpleadoDTO> enumeracion = listaEmpleados.elements();
 		
 		while (enumeracion.hasMoreElements() ) {
@@ -77,6 +77,9 @@ public class LecturaArchivo {
 			logger.info(empleadounico.getNombres());
 			logger.info(empleadounico.getApellidos());
 			logger.info(empleadounico.getCedula());
+			logger.info(empleadounico.getDepartamento());
+			logger.info(empleadounico.getSalario());
+			logger.info("--------------------------------");
 			
 		}
 	}

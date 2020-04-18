@@ -9,16 +9,15 @@ import co.com.udem.nomina.util.LecturaArchivo;
 
 public class NominaMain {
 	
-	private static final Logger logger = LogManager.getLogger(NominaMain.class);
-
 	public static void main(String[] args) {
 		
-		/*BasicConfigurator.configure();
+		/*String mensaje="";
+		BasicConfigurator.configure();
 		LecturaArchivo lecturaArchivo = new LecturaArchivo();
+		mensaje=lecturaArchivo.leerArchivo();
+		logger.info(mensaje);
+		*/
 		
-		logger.info(lecturaArchivo.leerArchivo());*/
-		
-		//System.out.println(lecturaArchivo.leerArchivo());
 		
 		ProcesadorArchivo procesadorArchivo = new ProcesadorArchivo();
 		procesadorArchivo.iniciarHilo();

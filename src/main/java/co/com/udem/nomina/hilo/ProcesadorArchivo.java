@@ -24,10 +24,11 @@ public class ProcesadorArchivo implements Runnable {
 		BasicConfigurator.configure();
 		while (true) {
 			try {
-				Thread.sleep(30000);
+				
 				mensaje = lecturaArchivo.leerArchivo();
+				Thread.sleep(3000);
 				int cantidadRegistros = lecturaArchivo.devolverCantidadRegistros();
-				if (cantidadRegistros==3) {
+				if (cantidadRegistros==6) {
 					break;
 				}
 				
