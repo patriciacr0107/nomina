@@ -45,7 +45,7 @@ public class LecturaArchivo {
 		return mensaje;
 	}
 	
-	private static void leerRegistro(String registro) {
+	private void leerRegistro(String registro) {
 		Scanner scanner = new Scanner(registro);
 		scanner.useDelimiter(",");
 		
@@ -54,7 +54,7 @@ public class LecturaArchivo {
 		scanner.close();
 	}
 	
-	private static void llenarDTO(Scanner scanner) {
+	private void llenarDTO(Scanner scanner) {
 		try {
 			EmpleadoDTO empleadoDTO = new EmpleadoDTO();
 			empleadoDTO.setNombres(scanner.next());
@@ -71,7 +71,7 @@ public class LecturaArchivo {
 
 	
 	
-	public static void imprimirEmpleadosArchivo() {
+	private void imprimirEmpleadosArchivo() {
 		Collection<EmpleadoDTO> coleccionEmpleados= listaEmpleados.values();
 		Iterator<EmpleadoDTO> iterator = coleccionEmpleados.iterator();
 		
