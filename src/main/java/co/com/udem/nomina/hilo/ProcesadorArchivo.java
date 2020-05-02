@@ -25,14 +25,15 @@ public class ProcesadorArchivo implements Runnable {
 		while (true) {
 			try {
 				
-				mensaje = lecturaArchivo.leerArchivo();
 				Thread.sleep(3000);
-				int cantidadRegistros = lecturaArchivo.devolverCantidadRegistros();
-				if (cantidadRegistros==6) {
+				mensaje = lecturaArchivo.leerArchivo();
+				int cantidadRegistros = lecturaArchivo.tamanoHashMap();
+				if (cantidadRegistros==3 || mensaje.compareTo("Procesado OK")!=0 ) {
+					logger.info("Mensaje "+mensaje);
 					break;
 				}
 				
-				logger.info("Mensaje "+mensaje);
+				
 				
 			}catch(InterruptedException e){
 				logger.error(e.getMessage());
@@ -42,6 +43,4 @@ public class ProcesadorArchivo implements Runnable {
 		
 	}
 	
-	
-
 }

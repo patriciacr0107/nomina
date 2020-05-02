@@ -1,0 +1,3 @@
+Patricia,Carmona,30234997,Sistemas,1000000
+Alonso,Vasco,123456,Gerencia,4000000
+Elizabeth,Rios,333333,Talento Humano,1000000

@@ -1,9 +1,9 @@
 package co.com.udem.nomina.util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import org.apache.log4j.LogManager;
@@ -14,29 +14,27 @@ import co.com.udem.nomina.dto.EmpleadoDTO;
 public class LecturaArchivo {
 
 	private static final Logger logger = LogManager.getLogger(LecturaArchivo.class);
-	private String rutaArchivo = "c:\\nominaEmpleados.txt";
-	private Hashtable<String, EmpleadoDTO> listaEmpleados = new Hashtable<String, EmpleadoDTO>();
-	private int cantidadRegistros =0;
+	private static HashMap<String, EmpleadoDTO> listaEmpleados = new HashMap<String, EmpleadoDTO>();
 	
 	public String leerArchivo() {
-
-		File archivoNomina = new File(rutaArchivo);
+		InputStream archivoEmpleados = null;
+		archivoEmpleados=ClassLoader.class.getResourceAsStream("/nominaEmpleados.txt");
 		Scanner scanner = null;
 		String mensaje = "Procesado OK";
 		
 		try {
-			scanner = new Scanner(archivoNomina);
+			scanner = new Scanner(archivoEmpleados);
 			while (scanner.hasNextLine() ) {
 				String registro = scanner.nextLine();
 				leerRegistro(registro);
-				cantidadRegistros++;
 				
 			}
-			imprimirEmpleadosArchivo(listaEmpleados);
+			imprimirEmpleadosArchivo();
 			
-		} catch (FileNotFoundException e) {
+			
+		} catch (Exception e) {
 			mensaje = "El archivo no existe";
-			logger.error(e.getMessage());
+			
 		} finally {
 			if (scanner != null) {
 				scanner.close();
@@ -47,11 +45,17 @@ public class LecturaArchivo {
 		return mensaje;
 	}
 	
-	private void leerRegistro(String registro) {
+	private static void leerRegistro(String registro) {
 		Scanner scanner = new Scanner(registro);
 		scanner.useDelimiter(",");
 		
-		//while (scanner.hasNext()) {
+		llenarDTO(scanner);
+		
+		scanner.close();
+	}
+	
+	private static void llenarDTO(Scanner scanner) {
+		try {
 			EmpleadoDTO empleadoDTO = new EmpleadoDTO();
 			empleadoDTO.setNombres(scanner.next());
 			empleadoDTO.setApellidos(scanner.next());
@@ -59,28 +63,31 @@ public class LecturaArchivo {
 			empleadoDTO.setDepartamento(scanner.next());
 			empleadoDTO.setSalario(Double.parseDouble(scanner.next()));
 			listaEmpleados.put(empleadoDTO.getCedula(), empleadoDTO);
-		//}
-		
-		scanner.close();
+		} catch (Exception e) {
+			logger.error("Error leyendo registro");
+
+		}
 	}
+
 	
-	public int devolverCantidadRegistros() {
-		return cantidadRegistros;
-	}
 	
-	public void imprimirEmpleadosArchivo(Hashtable<String, EmpleadoDTO> listaEmpleados) {
-		EmpleadoDTO empleadounico;
-		Enumeration<EmpleadoDTO> enumeracion = listaEmpleados.elements();
+	public static void imprimirEmpleadosArchivo() {
+		Collection<EmpleadoDTO> coleccionEmpleados= listaEmpleados.values();
+		Iterator<EmpleadoDTO> iterator = coleccionEmpleados.iterator();
 		
-		while (enumeracion.hasMoreElements() ) {
-			empleadounico =enumeracion.nextElement();
-			logger.info(empleadounico.getNombres());
-			logger.info(empleadounico.getApellidos());
-			logger.info(empleadounico.getCedula());
-			logger.info(empleadounico.getDepartamento());
-			logger.info(empleadounico.getSalario());
+		while (iterator.hasNext() ) {
+			EmpleadoDTO empleadoDTO = iterator.next();
+			logger.info(empleadoDTO.getNombres());
+			logger.info(empleadoDTO.getApellidos());
+			logger.info(empleadoDTO.getCedula());
+			logger.info(empleadoDTO.getDepartamento());
+			logger.info(empleadoDTO.getSalario());
 			logger.info("--------------------------------");
 			
 		}
+	}
+	
+	public int tamanoHashMap() {
+		return listaEmpleados.size();
 	}
 }
